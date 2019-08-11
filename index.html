@@ -1,142 +1,26 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <style>
-        </style>
-        <body>
-            <div class="container">
-                <h1>Acme w/ Bootstrap and Axios VJS</h1>
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link" id="companiesLink" href="#companies">Companies</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="productsLink" href="#products">Products</a>
-                    </li>
-                </ul>
-                <h2 id="title"></h2>
-                <div id="results">Loading...</div>
-            </div>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
-            <script>
-                const compHtml = document.querySelector('#results')
-                const companyLink = document.querySelector('#companiesLink');
-                const productLink = document.querySelector('#productsLink');
-                const title = document.querySelector('#title');
-
-                let companyData = [];
-                let productData = [];
-
-                const loadData = async () => {
-                    const companyURL = `https://acme-users-api-rev.herokuapp.com/api/companies`;
-                    const productURL = 'https://acme-users-api-rev.herokuapp.com/api/products';
-
-                    const compResponse = await axios.get(companyURL);
-                    companyData = compResponse.data;
-
-                    const prodResponse = await axios.get(productURL);
-                    productData = prodResponse.data;
-
-                    console.log('products: ', productData);
-                    console.log('companies: ', companyData);
-
-                    const companyLength = companyData.length;
-                    const productLength = productData.length;
-
-                    companyLink.innerHTML = `Companies (${companyLength})`;
-                    productLink.innerHTML = `Products (${productLength})`;
-
-                    renderCompanies(companyData);
-                }
-
-                const renderCompanies = (compData)=> {
-                    const pageTitle = `Companies`;
-                    const html = `
-                        <table class="table table-striped">
-                            <tr>
-                                <th>Id</th>
-                                <th>Name</th>
-                                <th>Phone</th>
-                                <th>State</th>
-                                <th>Catch Phrase</th>
-                            </tr>
-                            ${
-                                compData.map(company => {
-                                    return `
-                                        <tr>
-                                            <td>${company.id}</td>
-                                            <td>${company.name}</td>
-                                            <td>${company.phone}</td>
-                                            <td>${company.state}</td>
-                                            <td>${company.catchPhrase}</td>
-                                        </tr>
-                                    `
-                                }).join('')
-                            }
-                        </table>
-                    `;
-                    title.innerHTML = pageTitle;
-                    compHtml.innerHTML = html;
-                };
-
-                const renderProducts = (productData) => {
-                    const pageTitle = 'Products';
-                    const html = `
-                        <table class="table table-striped">
-                            <tr>
-                                <th>Id</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Suggested Price</th>
-                            </tr>
-                            ${
-                                productData.map(product => {
-                                    return `
-                                        <tr>
-                                            <td>${product.id}</td>
-                                            <td>${product.name}</td>
-                                            <td>${product.description}</td>
-                                            <td>${product.suggestedPrice}</td>
-                                        </tr>
-                                    `
-                                }).join('')
-                            }
-                        </table>
-                    `;
-                    title.innerHTML = pageTitle;
-                    compHtml.innerHTML = html;
-                };
-
-                loadData();
-
-                /*
-                companyLink.addEventListener('click', (ev) => {
-                    renderCompanies(companyData);
-                });
-
-                productLink.addEventListener('click', (ev) => {
-                    renderProducts(productData);
-                });;
-                  */
-
-                window.addEventListener("load", function() {
-                  loadData();
-                  });
-
-
-                  window.addEventListener('hashchange', ()=> {
-                    let hashId = window.location.hash;
-
-                    if (hashId === '#products') {
-                      renderProducts(productData);
-                    } else if (hashId === '#companies') {
-                      renderCompanies(companyData);
-                    }
-                    });
-
-
-            </script>
-
-        </body>
-    </head>
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Acme w/ Bootstrap and Axios VJS</h1>
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" id="companiesLink" href="#companies">Companies</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="productsLink" href="#products">Products</a>
+        </li>
+      </ul>
+      <h2 id="title"></h2>
+      <div id="results">
+        <table class="table table-striped" id="data">
+        </table>
+      </div>
+    </div>
+  </body>
 </html>
